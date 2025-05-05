@@ -1,14 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Todo = require('../models/todo');
-const passport = require('passport');
-const { body, validationResult } = require('express-validator');
-const validate = require('../middleware/validate');
-const authenticate = require('../middleware/authenticate');
-const { logger } = require('../utils/logger');
+const Todo = require("../models/Todo");
+const passport = require("passport");
+const { body, validationResult } = require("express-validator");
+const validate = require("../middleware/validate");
+const authenticate = require("../middleware/authenticate");
+const { logger } = require("../utils/logger");
 
 // Middleware to protect routes
-const jwtAuth = passport.authenticate('jwt', { session: false });
+const jwtAuth = passport.authenticate("jwt", { session: false });
 
 /**
  * @swagger
@@ -43,13 +43,13 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
  *       401:
  *         description: Не авторизован
  */
-router.get('/todos', authenticate, async (req, res) => {
+router.get("/todos", authenticate, async (req, res) => {
   try {
     const todos = await Todo.find({ user: req.user._id });
     res.json(todos);
   } catch (error) {
-    logger.error('Error fetching todos:', error);
-    res.status(500).json({ message: 'Error fetching todos' });
+    logger.error("Error fetching todos:", error);
+    res.status(500).json({ message: "Error fetching todos" });
   }
 });
 
@@ -85,18 +85,18 @@ router.get('/todos', authenticate, async (req, res) => {
  *       401:
  *         description: Не авторизован
  */
-router.post('/todos', authenticate, async (req, res) => {
+router.post("/todos", authenticate, async (req, res) => {
   try {
     const todo = new Todo({
       title: req.body.title,
       description: req.body.description,
-      user: req.user._id
+      user: req.user._id,
     });
     await todo.save();
     res.status(201).json(todo);
   } catch (error) {
-    logger.error('Error creating todo:', error);
-    res.status(400).json({ message: 'Error creating todo' });
+    logger.error("Error creating todo:", error);
+    res.status(400).json({ message: "Error creating todo" });
   }
 });
 
@@ -139,7 +139,7 @@ router.post('/todos', authenticate, async (req, res) => {
  *       404:
  *         description: Задача не найдена
  */
-router.patch('/todos/:id', authenticate, async (req, res) => {
+router.patch("/todos/:id", authenticate, async (req, res) => {
   try {
     const todo = await Todo.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
@@ -147,12 +147,12 @@ router.patch('/todos/:id', authenticate, async (req, res) => {
       { new: true }
     );
     if (!todo) {
-      return res.status(404).json({ message: 'Todo not found' });
+      return res.status(404).json({ message: "Todo not found" });
     }
     res.json(todo);
   } catch (error) {
-    logger.error('Error updating todo:', error);
-    res.status(400).json({ message: 'Error updating todo' });
+    logger.error("Error updating todo:", error);
+    res.status(400).json({ message: "Error updating todo" });
   }
 });
 
@@ -180,36 +180,38 @@ router.patch('/todos/:id', authenticate, async (req, res) => {
  *       404:
  *         description: Задача не найдена
  */
-router.delete('/todos/:id', authenticate, async (req, res) => {
+router.delete("/todos/:id", authenticate, async (req, res) => {
   try {
     const todo = await Todo.findOneAndDelete({
       _id: req.params.id,
-      user: req.user._id
+      user: req.user._id,
     });
     if (!todo) {
-      return res.status(404).json({ message: 'Todo not found' });
+      return res.status(404).json({ message: "Todo not found" });
     }
-    res.json({ message: 'Todo deleted' });
+    res.json({ message: "Todo deleted" });
   } catch (error) {
-    logger.error('Error deleting todo:', error);
-    res.status(400).json({ message: 'Error deleting todo' });
+    logger.error("Error deleting todo:", error);
+    res.status(400).json({ message: "Error deleting todo" });
   }
 });
 
-router.get('/stats', authenticate, async (req, res) => {
+router.get("/stats", authenticate, async (req, res) => {
   try {
     const stats = await Todo.aggregate([
       { $match: { user: req.user._id } },
-      { $group: {
-        _id: null,
-        total: { $sum: 1 },
-        completed: { $sum: { $cond: [{ $eq: ["$completed", true] }, 1, 0] } }
-      }}
+      {
+        $group: {
+          _id: null,
+          total: { $sum: 1 },
+          completed: { $sum: { $cond: [{ $eq: ["$completed", true] }, 1, 0] } },
+        },
+      },
     ]);
     res.json(stats[0] || { total: 0, completed: 0 });
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching stats' });
+    res.status(500).json({ error: "Error fetching stats" });
   }
 });
 
-module.exports = router; 
+module.exports = router;
