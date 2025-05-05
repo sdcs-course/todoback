@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   todoback:
-    image: ghcr.io/${{github.repository}}/todoback:latest
+    image: ghcr.io/dxskull/todoback:latest
     ports:
       - "5000:3000"
     environment:
