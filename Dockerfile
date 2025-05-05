@@ -11,7 +11,8 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Копируем исходный код
-COPY . .
+COPY src/ ./src/
+COPY .env* ./
 
 # Открываем порт
 EXPOSE 3000

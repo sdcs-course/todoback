@@ -14,17 +14,17 @@ jobs:
       packages: write
 
     steps:
-      - name: 'Checkout'
+      - name: "Checkout"
         uses: actions/checkout@main
 
-      - name: 'Login to ghcr'
+      - name: "Login to ghcr"
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: 'Build and push to ghcr'
+      - name: "Build and push to ghcr"
         run: |
           docker build . --tag ghcr.io/${{github.repository}}/todoback:latest
           docker push ghcr.io/${{github.repository}}/todoback:latest
@@ -32,7 +32,7 @@ jobs:
   deploy:
     name: Deploy to production
     needs: publish
-    runs-on: [self-hosted]
+    runs-on: self-hosted
 
     steps:
       - name: Login to ghcr
@@ -50,4 +50,4 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
-          docker stack deploy -c docker-compose.yml --with-registry-auth todoback 
+          docker stack deploy -c docker-compose.yml --with-registry-auth todoback
