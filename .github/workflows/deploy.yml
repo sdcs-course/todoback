@@ -49,10 +49,18 @@ jobs:
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
-
-      - name: Deploy docker stack
+          
+      - name: Load env vars and deploy
         working-directory: ${{ secrets.WORKING_DIRECTORY }}/todoback
-        run: docker stack deploy -c docker-compose.yml --with-registry-auth todoback
+        run: |
+          set -o allexport
+          source .env
+          set +o allexport
+          docker stack deploy -c docker-compose.yml --with-registry-auth todoback
+
+      # - name: Deploy docker stack
+      #   working-directory: ${{ secrets.WORKING_DIRECTORY }}/todoback
+      #   run: docker stack deploy -c docker-compose.yml --with-registry-auth todoback
       # - name: Deploy docker stack
       #   working-directory: ${{ secrets.WORKING_DIRECTORY }}/todoback
       #   env:
