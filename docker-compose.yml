@@ -1,0 +1,26 @@
+version: "3.2"
+
+services:
+  todoback:
+    image: ghcr.io/${{github.repository}}/todoback:latest
+    ports:
+      - "5000:3000"
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: ${MONGODB_URI}
+      JWT_SECRET: ${JWT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+    networks:
+      - todo-network
+    deploy:
+      mode: replicated
+      replicas: 1
+    resources:
+      limits:
+        cpus: "0.25"
+        memory: 512M
+
+networks:
+  todo-network:
+    external: true
