@@ -22,7 +22,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
+          password: ${{secrets.GHCR_TOKEN}}
 
       - name: "Build and push to ghcr"
         run: |
@@ -42,7 +42,7 @@ jobs:
         run: docker pull ghcr.io/${{github.repository}}/todoback:latest
 
       - name: Deploy docker stack
-        working-directory: ${{ secrets.WORKING_DIRECTORY }}/todoback
+        working-directory: ${{ secrets.WORKING_DIRECTORY }}/back
         env:
           NODE_ENV: production
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
