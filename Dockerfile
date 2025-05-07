@@ -15,7 +15,7 @@ COPY src/ ./src/
 COPY .env* ./
 
 # Открываем порт
-EXPOSE 3000
+EXPOSE 5000
 
 # Запускаем приложение
 CMD ["npm", "start"] 
