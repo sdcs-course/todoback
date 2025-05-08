@@ -3,7 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-const FRONTEND_URL = 'http://localhost:3000';
+const FRONTEND_URL = 'http://165.232.73.69';
 
 /**
  * @swagger
