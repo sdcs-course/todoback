@@ -17,7 +17,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://165.232.73.69:5000/auth/google/callback",
+      callbackURL: "https://84a3-165-232-73-69.ngrok-free.app/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
