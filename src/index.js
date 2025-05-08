@@ -19,7 +19,22 @@ const app = express();
 // test
 // Security middleware
 app.use(helmet());
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "http://localhost:3000", // Для локального фронтенда
+    "http://165.232.73.69", // Для фронтенда на сервере
+    "https://165.232.73.69", // Если настроишь HTTPS для фронтенда
+    "http://165.22.24.163", // Для фронтенда на сервере
+    "https://165.22.24.163", // Если настроишь HTTPS для фронтенда
+    "http://64.225.109.169", // Для фронтенда на сервере
+    "https://64.225.109.169", // Если настроишь HTTPS для фронтенда
+  ],
+  credentials: true, // Для отправки cookies (нужно для Google OAuth с withCredentials: true)
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"], // Разрешенные методы
+  allowedHeaders: ["Content-Type", "Authorization"], // Разрешенные заголовки
+};
+
+app.use(cors(corsOptions));
 app.use(compression());
 app.use(express.json());
 app.use(passport.initialize());
