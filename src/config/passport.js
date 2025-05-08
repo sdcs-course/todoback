@@ -22,6 +22,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         // Поиск существующего пользователя
+        //Test comment
         let user = await User.findOne({ googleId: profile.id });
 
         if (!user) {
