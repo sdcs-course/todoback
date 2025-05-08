@@ -51,7 +51,7 @@ router.get('/auth/google',
  *         description: Ошибка аутентификации
  */
 router.get('/auth/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  passport.authenticate('google', { session: false, failureRedirect: `${FRONTEND_URL}/login` }),
   (req, res) => {
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET);
     res.redirect(`${FRONTEND_URL}?token=${token}`);
